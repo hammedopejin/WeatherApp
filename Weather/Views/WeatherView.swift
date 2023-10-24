@@ -59,21 +59,10 @@ struct WeatherView: View {
                     // Handle the completion here
                 }
             }
-            //            .navigationTitle("Weather Forecast")
-            .navigationBarItems(trailing:
-                                    Button(action: {
-                isSearchViewPresented = true
-            }) {
-                Text("Search")
-            }
-            )
             .searchable(text: $searchText) {
                 // Perform search based on the entered text
 //                search(searchText)
             }
-        }
-        .sheet(isPresented: $isSearchViewPresented) {
-            SearchView()
         }
     }
 }
