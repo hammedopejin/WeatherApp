@@ -14,7 +14,7 @@ struct WeatherApp: App {
     
     init() {
         // Initialize the data manager with your WeatherNetworkManager instance
-        self.dataManager = WeatherDataManager(networkManager: WeatherNetworkManager(apiKey: "your_api_key_here"))
+        self.dataManager = WeatherDataManager(networkManager: WeatherNetworkManager(apiKey: "7e139cde0811bcf0662486f5ac470fa4"))
     }
 
     var body: some Scene {
