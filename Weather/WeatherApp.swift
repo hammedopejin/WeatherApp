@@ -24,24 +24,25 @@ struct WeatherApp: App {
     }
 }
 
-struct TestData {
-    // Sample data for current weather
-    static let sampleCurrentWeather = WeatherModel(
-        weatherDescription: "Sunny",
-        temperature: 25,
-        icon: "sun.max.fill",
-        date: Date()
-    )
+//struct TestData {
+//    // Sample data for current weather
+//    static let sampleCurrentWeather = WeatherModel(
+//        weatherDescription: "Sunny",
+//        temperature: 25,
+//        icon: "sun.max.fill",
+//        date: Date()
+//    )
+//
+//    // Sample data for weather forecast
+//    static let sampleWeatherForecast = WeatherForecastModel(
+//        dailyForecasts: [
+//            WeatherModel(weatherDescription: "Rainy", temperature: 20, icon: "cloud.rain.fill", date: Date()),
+//            WeatherModel(weatherDescription: "Partly Cloudy", temperature: 22, icon: "cloud.sun.fill", date: Date()),
+//            WeatherModel(weatherDescription: "Sunny", temperature: 28, icon: "sun.max.fill", date: Date()),
+//            WeatherModel(weatherDescription: "Partly Cloudy", temperature: 22, icon: "cloud.sun.fill", date: Date()),
+//            WeatherModel(weatherDescription: "Sunny", temperature: 28, icon: "sun.max.fill", date: Date()),
+//            WeatherModel(weatherDescription: "Rainy", temperature: 20, icon: "cloud.rain.fill", date: Date())
+//        ]
+//    )
+//}
 
-    // Sample data for weather forecast
-    static let sampleWeatherForecast = WeatherForecastModel(
-        dailyForecasts: [
-            WeatherModel(weatherDescription: "Rainy", temperature: 20, icon: "cloud.rain.fill", date: Date()),
-            WeatherModel(weatherDescription: "Partly Cloudy", temperature: 22, icon: "cloud.sun.fill", date: Date()),
-            WeatherModel(weatherDescription: "Sunny", temperature: 28, icon: "sun.max.fill", date: Date()),
-            WeatherModel(weatherDescription: "Partly Cloudy", temperature: 22, icon: "cloud.sun.fill", date: Date()),
-            WeatherModel(weatherDescription: "Sunny", temperature: 28, icon: "sun.max.fill", date: Date()),
-            WeatherModel(weatherDescription: "Rainy", temperature: 20, icon: "cloud.rain.fill", date: Date())
-        ]
-    )
-}

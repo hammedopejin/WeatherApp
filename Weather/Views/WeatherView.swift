@@ -12,8 +12,8 @@ struct WeatherView: View {
     
     @ObservedObject var locationViewModel: LocationViewModel
     @State private var isRefreshing = false
-    @State private var currentWeather: CurrentWeatherModel = CurrentWeatherModel(currentWeather: TestData.sampleCurrentWeather, forecast: TestData.sampleWeatherForecast) // Initialize with sample data
-    @State private var forecast: WeatherForecastModel = TestData.sampleWeatherForecast // Initialize with sample data
+    @State private var currentWeather: CurrentWeatherModel? // Initialize with sample data
+    @State private var forecast: WeatherDataModel? // Initialize with sample data
     let dataManager: WeatherDataManager // Inject the data manager
     @State private var isSearchViewPresented = false
     @State private var searchText = ""
@@ -30,22 +30,26 @@ struct WeatherView: View {
             List {
                 Text("Weather Forecast")
                     .font(.largeTitle)
-                CurrentWeatherView(weather: currentWeather.currentWeather)
+                if let currentWeather = currentWeather {
+                    CurrentWeatherView(model: currentWeather)
+                }
                 
                 Text("5-Day Forecast")
                     .font(.title)
                 
                 ScrollView(.horizontal) {
                     HStack(spacing: 20) {
-                        ForEach(forecast.dailyForecasts, id: \.date) { forecast in
-                            ForecastCellView(forecast: forecast)
+                        if let forecast = forecast {
+                            ForEach(forecast.fiveDayForcast[1...], id: \.date) { forecast in
+                                ForecastCellView(forecast: forecast)
+                            }
                         }
                     }
                     .padding()
                 }
             }
             .searchable(text: $searchText) {
-                // Perform search based on the entered text
+                //                searchViewModel.search(searchText)
             }
             .refreshable {
                 // Handle refresh action here
@@ -96,49 +100,128 @@ struct WeatherView: View {
             longitude = -122.4194
         }
         
-        dataManager.fetchData(latitude: latitude, longitude: longitude) { result in
+        dataManager.fetchData(latitude: latitude, longitude: longitude) {
+            result in
             // Handle the completion here
+            switch result {
+            case .success((let current, let forcast)):
+                self.currentWeather = current
+                self.forecast = forcast
+                print(current, forcast)
+                
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
         }
     }
+    
+    
 }
 
 struct CurrentWeatherView: View {
-    let weather: WeatherModel
+    @State private var weatherIcon: UIImage?
+    let model: CurrentWeatherModel
+    
+    func kelvinToCelsius(_ kelvin: Double) -> String {
+        return String(format: "%.2f", kelvin - 273.15)
+    }
+    func fetchWeatherIcon() {
+        if let icon = model.weather.first?.icon {
+            WeatherNetworkManager.fetchWeatherIcon(iconName: icon) { result in
+                switch result {
+                case .success(let iconImage):
+                    DispatchQueue.main.async {
+                        self.weatherIcon = iconImage
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
     
     var body: some View {
         VStack {
             Text("Today's Weather")
                 .font(.title)
             
-            Text(weather.weatherDescription)
+            Spacer()
+            Text(model.weather.first?.description ?? "<Error>")
                 .font(.headline)
             
-            Text("\(Int(weather.temperature))°C")
+            Spacer()
+            Text("\(kelvinToCelsius(model.main.temp))°C")
                 .font(.system(size: 50))
             
-            Image(systemName: weather.icon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 100, height: 100)
+            Spacer()
+            if let weatherIcon = weatherIcon {
+                Image(uiImage: weatherIcon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 200, height: 200)
+            } else {
+                Image(systemName: "sun.max.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 200, height: 200)
+                    .onAppear {
+                        fetchWeatherIcon()
+                    }
+            }
         }
         .padding()
+        .onAppear {
+            fetchWeatherIcon()
+        }
     }
 }
 
 struct ForecastCellView: View {
-    let forecast: WeatherModel
+    let forecast: WeatherDataModel.DayModel
+    @State private var weatherIcon: UIImage?
+    
+    func kelvinToCelsius(_ kelvin: Double) -> String {
+        return String(format: "%.2f", kelvin - 273.15)
+    }
+    
+    func fetchWeatherIcon() {
+        if let icon = forecast.list.first?.weather.first?.icon {
+            WeatherNetworkManager.fetchWeatherIcon(iconName: icon) { result in
+                switch result {
+                case .success(let iconImage):
+                    DispatchQueue.main.async {
+                        self.weatherIcon = iconImage
+                    }
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        }
+    }
     
     var body: some View {
         VStack {
             Text(forecast.date, style: .date)
                 .font(.caption)
+            Spacer()
             
-            Image(systemName: forecast.icon)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 40, height: 40)
+            if let weatherIcon = weatherIcon {
+                Image(uiImage: weatherIcon)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+            } else {
+                Image(systemName: "sun.max.fill")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .onAppear {
+                        fetchWeatherIcon()
+                    }
+            }
             
-            Text("\(Int(forecast.temperature))°C")
+            Spacer()
+            Text("\(kelvinToCelsius(forecast.list.first?.main.temp ?? 0))°C")
                 .font(.caption)
         }
     }
