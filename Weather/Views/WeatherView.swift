@@ -9,26 +9,34 @@ import SwiftUI
 import CoreLocation
 
 struct WeatherView: View {
+    
     @ObservedObject var locationViewModel: LocationViewModel
-    @State private var isRefreshing = false
+    @State private var isRefreshing: Bool
     @State private var currentWeather: CurrentWeatherModel?
     @State private var forecast: WeatherDataModel?
-    let dataManager: WeatherDataManager // Inject the data manager
-    @State private var isSearchViewPresented = false
-    @State private var searchText = ""
-    @State private var shouldShowLocationServiceAlert = false
-    @ObservedObject private var searchViewModel = SearchViewModel()
+    let dataManager: WeatherDataManager
+    @Binding var selectedLocation: LocationResult?
+    @State private var isSearchViewPresented: Bool
+    @State private var searchText: String
+    @State private var shouldShowLocationServiceAlert: Bool
+    @ObservedObject private var searchViewModel: SearchViewModel
     
-    init(dataManager: WeatherDataManager) {
+    init(dataManager: WeatherDataManager, selectedLocation: Binding<LocationResult?>) {
         self.dataManager = dataManager
-        locationViewModel = LocationViewModel(dataManager: dataManager)
+        self._selectedLocation = selectedLocation
+        self.locationViewModel = LocationViewModel(dataManager: dataManager)
+        self._isRefreshing = State(initialValue: false)
+        self._isSearchViewPresented = State(initialValue: false)
+        self._searchText = State(initialValue: "")
+        self._shouldShowLocationServiceAlert = State(initialValue: false)
+        self.searchViewModel = SearchViewModel()
     }
     
     var body: some View {
         NavigationView {
             ScrollView {
                 LazyVStack {
-                    VStack { // Center everything in a VStack
+                    VStack {
                         Text("Weather Forecast")
                             .font(.largeTitle)
                             .bold()
@@ -56,15 +64,19 @@ struct WeatherView: View {
                             .padding()
                         }
                     }
-                    .frame(maxWidth: .infinity) // Center the content in the ScrollView
+                    .frame(maxWidth: .infinity)
                     .searchable(text: $searchText) {
-                        // Search bar functionality can be added here
+                        Button("Search") {
+                            // Handle the search button press here
+                            searchByCity()
+                        }
                     }
                     .refreshable {
                         isRefreshing = true
                         fetchData()
                     }
                     .onAppear {
+                        selectedLocation = nil
                         if locationViewModel.authorizationStatus == .notDetermined {
                             locationViewModel.requestLocationAuthorization()
                         } else if locationViewModel.authorizationStatus == .denied {
@@ -73,10 +85,6 @@ struct WeatherView: View {
                             handleOnAppear()
                         }
                     }
-                    .sheet(isPresented: $isSearchViewPresented) {
-                        SearchResultsView(searchResults: $searchViewModel.searchResults)
-                    }
-                    
                     if locationViewModel.authorizationStatus == .denied {
                         Text("Location access is denied. Please enable location services in Settings.")
                             .foregroundColor(.red)
@@ -85,7 +93,18 @@ struct WeatherView: View {
                 }
                 .background(Color(UIColor.systemBackground))
             }
+            .sheet(isPresented: $isSearchViewPresented) {
+                SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: self.dataManager)
+            }
+            
         }
+    }
+    
+    
+    // Function to initiate city search
+    private func searchByCity() {
+        searchViewModel.parseCityName(searchText)
+        self.isSearchViewPresented = true
     }
     
     private func handleOnAppear() {
@@ -97,15 +116,17 @@ struct WeatherView: View {
     }
     
     private func fetchData() {
-        // Fetch data using the provided coordinates or locationViewModel.userLocation
-        let latitude: Double
-        let longitude: Double
+        // Define variables for latitude and longitude
+        var latitude: Double
+        var longitude: Double
         
-        if let location = locationViewModel.userLocation {
+        if let location = selectedLocation {
+            latitude = location.latitude
+            longitude = location.longitude
+        } else if let location = locationViewModel.userLocation {
             latitude = location.coordinate.latitude
             longitude = location.coordinate.longitude
         } else {
-            // Use default coordinates as a fallback
             latitude = 37.7749
             longitude = -122.4194
         }
