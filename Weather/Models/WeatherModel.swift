@@ -107,12 +107,6 @@ struct CoordModel: Codable {
     let lon: Double
 }
 
-//
-//struct CurrentWeatherModel: Codable {
-//    let currentWeather: WeatherModel
-//    let forecast: WeatherForecastModel
-//}
-
 struct CurrentWeatherModel: Decodable {
     struct Coords:Decodable {
         let lat: Double

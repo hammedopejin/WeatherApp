@@ -11,27 +11,31 @@ struct SearchResultsView: View {
     @Binding var searchResults: [LocationResult]
     @Binding var selectedLocation: LocationResult?
     let weatherDataManager: WeatherDataManager
-    @State private var temporarySelectedLocation: LocationResult?
+
     @State private var shouldPresentWeatherView = false
-    
-    init(searchResults: Binding<[LocationResult]>, selectedLocation: Binding<LocationResult?>, weatherDataManager: WeatherDataManager) {
-        self._searchResults = searchResults
-        self._selectedLocation = selectedLocation
-        self.weatherDataManager = weatherDataManager
-    }
-    
+    @State private var selectedLocationForNavigation: LocationResult?
+
     var body: some View {
         NavigationView {
             List {
                 Text("Search Results")
                     .font(.title)
                 ForEach(searchResults, id: \.name) { result in
-                    NavigationLink(destination: WeatherView(dataManager: self.weatherDataManager, selectedLocation: $selectedLocation)) {
+                    Button(action: {
+                        selectedLocationForNavigation = result
+                        shouldPresentWeatherView = true
+                    }) {
                         SearchResultRow(locationResult: result, selectedLocation: $selectedLocation)
                     }
                 }
             }
             .navigationBarTitle("Search Results")
+            .background(
+                NavigationLink("", destination: WeatherView(dataManager: self.weatherDataManager, selectedLocation: $selectedLocationForNavigation), isActive: $shouldPresentWeatherView)
+            )
+        }
+        .onAppear {
+            selectedLocationForNavigation = selectedLocation
         }
     }
 }
@@ -53,15 +57,15 @@ struct SearchResultRow: View {
 }
 
 struct WeatherViewForLocation: View {
-    @State var locationResult: LocationResult?
+    let locationResult: LocationResult
     let weatherDataManager: WeatherDataManager
 
-    init(weatherDataManager: WeatherDataManager, locationResult: LocationResult?) {
+    init(weatherDataManager: WeatherDataManager, locationResult: LocationResult) {
         self.weatherDataManager = weatherDataManager
-        self._locationResult = State(initialValue: locationResult)
+        self.locationResult = locationResult
     }
 
     var body: some View {
-        WeatherView(dataManager: weatherDataManager, selectedLocation: $locationResult)
+        WeatherView(dataManager: weatherDataManager, selectedLocation: .constant(locationResult))
     }
 }

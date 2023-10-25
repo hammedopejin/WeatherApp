@@ -71,6 +71,10 @@ struct WeatherView: View {
                             searchByCity()
                         }
                     }
+                    .onSubmit {
+                        // Handle the search action here
+                        searchByCity()
+                    }
                     .refreshable {
                         isRefreshing = true
                         fetchData()
@@ -92,14 +96,38 @@ struct WeatherView: View {
                     }
                 }
                 .background(Color(UIColor.systemBackground))
+                .onChange(of: selectedLocation) { newLocation, oldLocation in
+                    if let location = newLocation {
+                        if location != oldLocation {
+                            // Fetch data for the newly selected location
+                            fetchDataForSelectedLocation(location)
+                        }
+                    }
+                }
             }
+            .keyboardType(.webSearch)
             .sheet(isPresented: $isSearchViewPresented) {
-                SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: self.dataManager)
+                SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: dataManager)
             }
-            
         }
     }
     
+    private func fetchDataForSelectedLocation(_ location: LocationResult) {
+        dataManager.fetchData(latitude: location.latitude, longitude: location.longitude) { result in
+            switch result {
+            case .success((let current, let forecast)):
+                self.currentWeather = current
+                self.forecast = forecast
+                print(current, forecast)
+
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+
+            // Ensure that isRefreshing is set to false when the refresh is completed
+            self.isRefreshing = false
+        }
+    }
     
     // Function to initiate city search
     private func searchByCity() {
