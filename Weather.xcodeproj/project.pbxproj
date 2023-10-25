@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		013B110A2AE94F750034E3D6 /* WeatherNetworkManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 013B11092AE94F750034E3D6 /* WeatherNetworkManagerTests.swift */; };
 		01B1874A2AE75386002C4B57 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B187492AE75386002C4B57 /* WeatherModel.swift */; };
 		01B1874B2AE75386002C4B57 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B187492AE75386002C4B57 /* WeatherModel.swift */; };
 		01B1874C2AE75386002C4B57 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01B187492AE75386002C4B57 /* WeatherModel.swift */; };
@@ -58,6 +59,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		013B11092AE94F750034E3D6 /* WeatherNetworkManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherNetworkManagerTests.swift; sourceTree = "<group>"; };
 		01B187492AE75386002C4B57 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		01B187512AE754E8002C4B57 /* WeatherNetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherNetworkManager.swift; sourceTree = "<group>"; };
 		01B187552AE75619002C4B57 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 			isa = PBXGroup;
 			children = (
 				01C36B6E2AE74FAD001E035B /* WeatherTests.swift */,
+				013B11092AE94F750034E3D6 /* WeatherNetworkManagerTests.swift */,
 			);
 			path = WeatherTests;
 			sourceTree = "<group>";
@@ -362,6 +365,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				013B110A2AE94F750034E3D6 /* WeatherNetworkManagerTests.swift in Sources */,
 				01B187682AE77F47002C4B57 /* SearchViewModel.swift in Sources */,
 				01B187532AE754E8002C4B57 /* WeatherNetworkManager.swift in Sources */,
 				01B1876C2AE7835B002C4B57 /* SearchResultsView.swift in Sources */,
