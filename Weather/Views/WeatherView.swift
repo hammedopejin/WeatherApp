@@ -77,7 +77,12 @@ struct WeatherView: View {
                     }
                     .refreshable {
                         isRefreshing = true
-                        fetchData()
+                        withAnimation {
+                            fetchData()
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            self.isRefreshing = false
+                        }
                     }
                     .onAppear {
                         selectedLocation = nil
@@ -110,7 +115,6 @@ struct WeatherView: View {
                 }
             }
         }
-        .animation(.easeInOut) // Add a global animation to the entire view
     }
     
     private func fetchDataForSelectedLocation(_ location: LocationResult) {
@@ -220,9 +224,8 @@ struct CurrentWeatherView: View {
                 Image(uiImage: weatherIcon)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)         
+                    .frame(width: 100, height: 100)
                     .transition(.opacity) // Add opacity transition for a smooth appearance
-                    .animation(.default) // Add animation for the transition
             
             } else {
                 Image(systemName: "sun.max.fill")
@@ -230,7 +233,9 @@ struct CurrentWeatherView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .onAppear {
-                        fetchWeatherIcon()
+                        withAnimation {
+                            fetchWeatherIcon()
+                        }
                     }
             }
         }
@@ -277,14 +282,15 @@ struct ForecastCellView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .transition(.opacity) // Add opacity transition for a smooth appearance
-                    .animation(.default) // Add animation for the transition
             } else {
                 Image(systemName: "sun.max.fill")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
                     .onAppear {
-                        fetchWeatherIcon()
+                        withAnimation {
+                            fetchWeatherIcon()
+                        }
                     }
             }
             

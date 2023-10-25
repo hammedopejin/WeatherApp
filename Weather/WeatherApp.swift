@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct WeatherApp: App {
     @State private var selectedLocation: LocationResult? // Create a State variable for selectedLocation
-    let dataManager = WeatherDataManager(networkManager: WeatherNetworkManager(apiKey: "Insert your API key here"))
+    let dataManager = WeatherDataManager(networkManager: WeatherNetworkManager(apiKey: "7e139cde0811bcf0662486f5ac470fa4"))
 
     var body: some Scene {
         WindowGroup {
