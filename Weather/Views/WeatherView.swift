@@ -104,12 +104,13 @@ struct WeatherView: View {
                         }
                     }
                 }
-            }
-            .keyboardType(.webSearch)
-            .sheet(isPresented: $isSearchViewPresented) {
-                SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: dataManager)
+                .keyboardType(.webSearch)
+                .sheet(isPresented: $isSearchViewPresented) {
+                    SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: dataManager)
+                }
             }
         }
+        .animation(.easeInOut) // Add a global animation to the entire view
     }
     
     private func fetchDataForSelectedLocation(_ location: LocationResult) {
@@ -219,7 +220,10 @@ struct CurrentWeatherView: View {
                 Image(uiImage: weatherIcon)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
+                    .frame(width: 100, height: 100)         
+                    .transition(.opacity) // Add opacity transition for a smooth appearance
+                    .animation(.default) // Add animation for the transition
+            
             } else {
                 Image(systemName: "sun.max.fill")
                     .resizable()
@@ -272,6 +276,8 @@ struct ForecastCellView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 100, height: 100)
+                    .transition(.opacity) // Add opacity transition for a smooth appearance
+                    .animation(.default) // Add animation for the transition
             } else {
                 Image(systemName: "sun.max.fill")
                     .resizable()

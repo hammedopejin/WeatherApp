@@ -101,14 +101,6 @@ class WeatherNetworkManager {
         
         task.resume()
     }
-    
-    func returnLatLongFromCity(location: String) -> Any? {
-    
-        
-        
-        
-        return nil
-    }
 }
 
 enum NetworkError: Error {

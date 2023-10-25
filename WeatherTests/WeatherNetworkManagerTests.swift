@@ -15,7 +15,7 @@ class WeatherNetworkManagerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         // Initialize your WeatherNetworkManager with a test API key
-        networkManager = WeatherNetworkManager(apiKey: "7e139cde0811bcf0662486f5ac470fa4")
+        networkManager = WeatherNetworkManager(apiKey: "Insert your API key here")
     }
 
     override func tearDown() {
