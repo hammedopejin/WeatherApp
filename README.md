@@ -1,7 +1,7 @@
 # WeatherApp
 Weather Forecast App
 
-[Screen Recording 2023-10-25 at 11.36.15 AM.mov.zip](https://github.com/hammedopejin/WeatherApp/files/13169468/Screen.Recording.2023-10-25.at.11.36.15.AM.mov.zip)
+[Screen Recording 2023-10-25 at 12.42.02 PM.mov.zip](https://github.com/hammedopejin/WeatherApp/files/13169999/Screen.Recording.2023-10-25.at.12.42.02.PM.mov.zip)
 
 
 This Weather Forecast App is a simple yet visually appealing iOS application built with SwiftUI and Swift. The app fetches weather data from the OpenWeatherMap API and presents it in an intuitive user interface. It includes current weather conditions, a 5-day forecast, pull-to-refresh functionality, and the ability to search for weather in different locations.
@@ -60,5 +60,6 @@ Please note that while endeavores had been made to meet the requirements of the 
 
 Hope you enjoy exploring the Weather Forecast App, and it serves as an illustrative example of SwiftUI, network integration, and UI/UX design for iOS applications. If you have any questions or feedback, feel free to contact. Thank you for your consideration!
 
-<img width="468" alt="Screenshot 2023-10-25 at 10 08 19 AM" src="https://github.com/hammedopejin/WeatherApp/assets/20325987/f3a89077-2b04-441c-8d92-fe803e80755b">
+
+[Screen Recording 2023-10-25 at 12.42.02 PM.mov.zip](https://github.com/hammedopejin/WeatherApp/files/13170001/Screen.Recording.2023-10-25.at.12.42.02.PM.mov.zip)
 
