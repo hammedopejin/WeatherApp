@@ -75,22 +75,24 @@ struct WeatherView: View {
                         // Handle the search action here
                         searchByCity()
                     }
-                    .refreshable {
-                        isRefreshing = true
-                        withAnimation {
-                            fetchData()
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            self.isRefreshing = false
-                        }
-                    }
                     .onAppear {
                         selectedLocation = nil
                         if locationViewModel.authorizationStatus == .notDetermined {
                             locationViewModel.requestLocationAuthorization()
+                            Text("Authorization Status: " + (locationViewModel.authorizationStatus?.rawValue.description ?? "Not Determined"))
+                                .onReceive(locationViewModel.$authorizationStatus) { newStatus in
+                                    
+                                    if newStatus == .authorizedWhenInUse || locationViewModel.authorizationStatus == .authorizedAlways {
+                                        handleOnAppear()
+                                    }
+                                    
+                                    withAnimation {
+                                        fetchData()
+                                    }
+                                }
                         } else if locationViewModel.authorizationStatus == .denied {
                             shouldShowLocationServiceAlert = true
-                        } else {
+                        } else if locationViewModel.authorizationStatus == .authorizedWhenInUse || locationViewModel.authorizationStatus == .authorizedAlways {
                             handleOnAppear()
                         }
                     }
@@ -112,6 +114,15 @@ struct WeatherView: View {
                 .keyboardType(.webSearch)
                 .sheet(isPresented: $isSearchViewPresented) {
                     SearchResultsView(searchResults: $searchViewModel.searchResults, selectedLocation: $selectedLocation, weatherDataManager: dataManager)
+                }
+            }
+            .refreshable {
+                isRefreshing = true
+                withAnimation {
+                    fetchData()
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                    self.isRefreshing = false
                 }
             }
         }

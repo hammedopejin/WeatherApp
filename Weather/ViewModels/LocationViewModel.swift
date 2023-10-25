@@ -14,16 +14,16 @@ class LocationViewModel: NSObject, ObservableObject {
     @Published var authorizationStatus: CLAuthorizationStatus?
     @Published var shouldShowLocationServiceAlert: Bool = false
     private var cancellables: Set<AnyCancellable> = []
-
+    
     private var locationManager = CLLocationManager()
     private var dataManager: WeatherDataManager // Add a property to hold the data manager
-
-        init(dataManager: WeatherDataManager) {
-            self.dataManager = dataManager // Initialize the data manager
-            super.init()
-            setupLocationManager()
-        }
-
+    
+    init(dataManager: WeatherDataManager) {
+        self.dataManager = dataManager // Initialize the data manager
+        super.init()
+        setupLocationManager()
+    }
+    
     private func setupLocationManager() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBest
@@ -47,24 +47,25 @@ extension LocationViewModel: CLLocationManagerDelegate {
             userLocation = location
         }
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-            // Update the authorization status property
-            authorizationStatus = status
-            
-            // Handle authorization changes, if needed
-            switch status {
-            case .authorizedWhenInUse, .authorizedAlways:
-                // Authorization granted, you can now fetch weather data
-                if let location = userLocation {
-                    // Fetch weather data using the location
-                    dataManager.fetchData(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude) { result in
-                        // Handle the completion here
-                    }
+        // Update the authorization status property
+        authorizationStatus = status
+        
+        // Handle authorization changes, if needed
+        switch status {
+        case .authorizedWhenInUse, .authorizedAlways:
+            // Authorization granted, you can now fetch weather data
+            if let location = userLocation {
+                // Fetch weather data using the location
+                dataManager.fetchData(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude) { result in
+                    // Handle the completion here
+                    
                 }
-            default:
-                // Handle denied or restricted access
-                break
             }
+        default:
+            // Handle denied or restricted access
+            break
         }
+    }
 }

@@ -7,8 +7,8 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "A36210E3-AD56-45CF-BAED-BB5549BAB9C9"
-            shouldBeEnabled = "Yes"
+            uuid = "AF7C3BB8-C310-43CC-9D75-3F0DC18A3CBA"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Weather/Networks/WeatherNetworkManager.swift"
@@ -17,6 +17,22 @@
             startingLineNumber = "75"
             endingLineNumber = "75"
             landmarkName = "fetchWeatherForecast(latitude:longitude:completion:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "0201F1D3-1EE7-43B0-A9C3-1FD3FF580230"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Weather/Networks/WeatherNetworkManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "48"
+            endingLineNumber = "48"
+            landmarkName = "fetchCurrentWeather(latitude:longitude:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
