@@ -50,7 +50,7 @@ struct WeatherView: View {
                         Text("5-Day Forecast")
                             .font(.title)
                             .bold()
-                            .foregroundColor(Color.blue)
+                            .foregroundColor(Color.white)
                         
                         ScrollView(.horizontal) {
                             HStack(spacing: 20) {
@@ -71,6 +71,7 @@ struct WeatherView: View {
                             searchByCity()
                         }
                     }
+                    .background(.blue)
                     .onSubmit {
                         // Handle the search action here
                         searchByCity()
@@ -102,7 +103,6 @@ struct WeatherView: View {
                             .padding()
                     }
                 }
-                .background(Color(UIColor.systemBackground))
                 .onChange(of: selectedLocation) { newLocation, oldLocation in
                     if let location = newLocation {
                         if location != oldLocation {
@@ -124,7 +124,7 @@ struct WeatherView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self.isRefreshing = false
                 }
-            }
+            }.background(Color.yellow.opacity(0.5))
         }
     }
     
