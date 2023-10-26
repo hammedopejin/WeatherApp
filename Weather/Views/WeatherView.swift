@@ -35,12 +35,13 @@ struct WeatherView: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                LazyVStack {
+                LazyVStack(spacing: 8) {
                     VStack {
                         Text("Weather Forecast")
                             .font(.largeTitle)
                             .bold()
                             .foregroundColor(Color.blue)
+                            .padding(.top, 10)
                         
                         if let currentWeather = currentWeather {
                             CurrentWeatherView(model: currentWeather)
@@ -51,9 +52,10 @@ struct WeatherView: View {
                             .font(.title)
                             .bold()
                             .foregroundColor(Color.white)
+                            .padding(.top, 5)
                         
                         ScrollView(.horizontal) {
-                            HStack(spacing: 20) {
+                            HStack(spacing: 10) {
                                 if let forecast = forecast {
                                     ForEach(forecast.fiveDayForcast[1...], id: \.date) { forecast in
                                         ForecastCellView(forecast: forecast)
@@ -63,6 +65,7 @@ struct WeatherView: View {
                             }
                             .padding()
                         }
+                        .padding(.bottom, 10)
                     }
                     .frame(maxWidth: .infinity)
                     .searchable(text: $searchText) {
@@ -70,8 +73,9 @@ struct WeatherView: View {
                             // Handle the search button press here
                             searchByCity()
                         }
-                    }
-                    .background(.blue)
+                    }.background(Color.green)
+                    .padding(EdgeInsets(top: 5, leading: 5, bottom: 0, trailing: 5))
+                    .background(Color.blue.opacity(0.7))
                     .onSubmit {
                         // Handle the search action here
                         searchByCity()
@@ -86,10 +90,6 @@ struct WeatherView: View {
                                     if newStatus == .authorizedWhenInUse || locationViewModel.authorizationStatus == .authorizedAlways {
                                         handleOnAppear()
                                     }
-                                    
-                                    withAnimation {
-                                        fetchData()
-                                    }
                                 }
                         } else if locationViewModel.authorizationStatus == .denied {
                             shouldShowLocationServiceAlert = true
@@ -97,6 +97,8 @@ struct WeatherView: View {
                             handleOnAppear()
                         }
                     }
+                    .background(Color(.systemBackground)) // Set the main background color
+                    .navigationBarTitle("Weather App", displayMode: .inline)
                     if locationViewModel.authorizationStatus == .denied {
                         Text("Location access is denied. Please enable location services in Settings.")
                             .foregroundColor(.red)
@@ -124,7 +126,10 @@ struct WeatherView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                     self.isRefreshing = false
                 }
-            }.background(Color.yellow.opacity(0.5))
+            }
+            .background(
+                LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.7), Color.white]), startPoint: .top, endPoint: .bottom)
+            )
         }
     }
     
